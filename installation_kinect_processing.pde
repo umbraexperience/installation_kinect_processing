@@ -19,17 +19,20 @@ Kinect kinect;
 PImage depthImg;
 
 // Which pixels do we care about?
-int minDepth =  60;
-int maxDepth = 1000;
+int minDepth = 750;
+int maxDepth = 1025;
 
-int x1 = 30;
-int y1 = 160;
+// x1 = 30 y1=160
+int x1 = 10;
+int y1 = 130;
 
-int x2 = 243;
-int y2 = 160;
+int x2 = 250;
+int y2 = 130;
 
-int x3 = 456;
-int y3 = 160;
+
+//x3 = 456
+int x3 = 487;
+int y3 = 130;
 
 int wr = 153;
 
@@ -44,14 +47,14 @@ boolean inter3 = false;
 // What is the kinect's angle
 float angle;
 
-int thres = 2800;
+int thres = 2700;
 
 void setup() {
   size(640, 480);
 
   kinect = new Kinect(this);
   kinect.initDepth();
-  //kinect.initVideo();
+  kinect.initVideo();
 
   angle = kinect.getTilt();
 
@@ -81,7 +84,7 @@ void draw() {
     int y = i / 640;
     int x = i - y * 640;
     if (rawDepth[i] >= minDepth && rawDepth[i] <= maxDepth) {
-      if ( y >= 160 && y <= 320) {
+      if ( y >= 130 && y <= 290) {
         depthImg.pixels[i] = color(255);
         if (x >= x1 && x < x1 + wr) {
           c1++;
