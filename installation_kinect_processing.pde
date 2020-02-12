@@ -8,7 +8,7 @@ import org.openkinect.processing.*;
 import oscP5.*;
 import netP5.*;
 
-OscP5 oscP5;                    // Creem un objecte OSC
+OscP5 oscP5;         // Creem un objecte OSC
 NetAddress video;    // Creem un objecte per enviar OSC (on definirem Port i IP)
 NetAddress audio;    // Creem un objecte per enviar OSC (on definirem Port i IP)
 NetAddress leds;
@@ -52,6 +52,12 @@ int thres = 2700;
 void setup() {
   size(640, 480);
 
+  /* start oscP5, listening for incoming messages at port 12000 */
+  oscP5 = new OscP5(this, 12000);
+  video = new NetAddress("127.0.0.1", 33334);
+  audio = new NetAddress("127.0.0.1", 2391);
+  leds = new NetAddress("192.168.24.62", 2390);
+
   kinect = new Kinect(this);
   kinect.initDepth();
   kinect.initVideo();
@@ -60,12 +66,6 @@ void setup() {
 
   // Blank image
   depthImg = new PImage(kinect.width, kinect.height);
-
-  /* start oscP5, listening for incoming messages at port 12000 */
-  oscP5 = new OscP5(this, 12000);
-  video = new NetAddress("127.0.0.1", 33334);
-  audio = new NetAddress("127.0.0.1", 2390);
-  leds = new NetAddress("192.168.24.62", 2390);
 }
 
 void draw() {
@@ -139,7 +139,8 @@ void draw() {
     if (!inter2) {
       inter2=true;
       background(255, 0, 0);
-      OscMessage myMessage = new OscMessage("1");
+      OscMessage myMessage = new OscMessage("/");
+      myMessage.add(1); /* add an int to the osc message */
       /* send the message */
       oscP5.send(myMessage, audio);
     }
@@ -148,7 +149,8 @@ void draw() {
     if (inter2) {
       inter2=false;
       background(0, 0, 255);
-      OscMessage myMessage = new OscMessage("0");
+      OscMessage myMessage = new OscMessage("/");
+      myMessage.add(0); /* add an int to the osc message */
       /* send the message */
       oscP5.send(myMessage, audio);
     }
@@ -159,8 +161,8 @@ void draw() {
     if (!inter3) {
       inter3=true;
       background(255, 0, 0);
-      
-            OscMessage myMessage = new OscMessage("1");
+
+      OscMessage myMessage = new OscMessage("1");
       /* send the message */
       oscP5.send(myMessage, leds);
     }
@@ -169,8 +171,8 @@ void draw() {
     if (inter3) {
       inter3=false;
       background(0, 0, 255);
-      
-                  OscMessage myMessage = new OscMessage("0");
+
+      OscMessage myMessage = new OscMessage("0");
       /* send the message */
       oscP5.send(myMessage, leds);
     }
