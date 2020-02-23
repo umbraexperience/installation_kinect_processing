@@ -12,6 +12,7 @@ OscP5 oscP5;         // Creem un objecte OSC
 NetAddress video;    // Creem un objecte per enviar OSC (on definirem Port i IP)
 NetAddress audio;    // Creem un objecte per enviar OSC (on definirem Port i IP)
 NetAddress leds;
+NetAddress leds2;
 
 Kinect kinect;
 
@@ -54,9 +55,10 @@ void setup() {
 
   /* start oscP5, listening for incoming messages at port 12000 */
   oscP5 = new OscP5(this, 12000);
-  video = new NetAddress("127.0.0.1", 33334);
+  video = new NetAddress("192.168.0.102", 33334);
   audio = new NetAddress("127.0.0.1", 2391);
-  leds = new NetAddress("192.168.24.62", 2390);
+  leds = new NetAddress("192.168.0.100", 2390);
+  leds2 = new NetAddress("192.168.0.103", 2390);
 
   kinect = new Kinect(this);
   kinect.initDepth();
@@ -165,6 +167,7 @@ void draw() {
       OscMessage myMessage = new OscMessage("1");
       /* send the message */
       oscP5.send(myMessage, leds);
+      oscP5.send(myMessage, leds2);
     }
   } else if (c3 < thres) {
 
@@ -175,6 +178,7 @@ void draw() {
       OscMessage myMessage = new OscMessage("0");
       /* send the message */
       oscP5.send(myMessage, leds);
+      oscP5.send(myMessage, leds2);
     }
   }
 
